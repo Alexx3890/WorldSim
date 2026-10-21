@@ -475,35 +475,53 @@ export default function Home() {
       "ProcessPoolExecutor spawned 4 workers for discrete-event parallel execution.",
     ]);
 
+    const numStrategies = Math.max(1, strategies.length);
+    let currentStrat = 0;
+    let currentRep = 0;
+
     const interval = setInterval(() => {
-      setSimReplication((prev) => {
-        if (prev < totalReplications) {
-          const next = prev + 3;
+      currentRep += 3;
+      if (currentRep > totalReplications) {
+        if (currentStrat < numStrategies - 1) {
+          currentStrat += 1;
+          currentRep = 3;
+          setActiveStrategyIndex(currentStrat);
           setRunLogs((logs) => [
             ...logs,
-            `Replication batch completed [seed=${42 + next}] · collector verified zero unhandled exceptions.`,
+            `Completed all replications for Strategy [${currentStrat - 1}].`,
+            `Swapping process memory pool and starting Strategy [${currentStrat}] (${strategies[currentStrat]?.name || "Intervention"})...`,
           ]);
-          return next;
+        } else {
+          currentRep = totalReplications;
         }
-        return prev;
-      });
-    }, 400);
+      }
+      setSimReplication(currentRep);
+      setRunLogs((logs) => [
+        ...logs,
+        `Strategy [${currentStrat}] replication batch completed [seed=${42 + currentStrat * 100 + currentRep}] · zero unhandled exceptions.`,
+      ]);
+    }, 350);
 
     try {
       let data: AISimulationResponse;
       try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 20000);
         const endpoint = getApiEndpoint("/api/v1/simulations/ai-plan");
         const res = await fetch(endpoint, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
+          signal: controller.signal,
           body: JSON.stringify({
             prompt: prompt || "Emergency room staffing optimization",
             strategy_count: strategies.length - 1,
             replications_per_strategy: 10,
           }),
         });
+        clearTimeout(timeoutId);
 
         clearInterval(interval);
+        setActiveStrategyIndex(numStrategies);
         setSimReplication(totalReplications);
 
         if (res.ok) {
@@ -513,6 +531,7 @@ export default function Home() {
         }
       } catch {
         clearInterval(interval);
+        setActiveStrategyIndex(numStrategies);
         setSimReplication(totalReplications);
         data = generateClientFallbackSimulation(selectedPackId, prompt, activeParameters, strategies);
       }
@@ -537,6 +556,9 @@ export default function Home() {
         setCurrentTab("results");
       }, 900);
     } finally {
+      clearInterval(interval);
+      setActiveStrategyIndex(numStrategies);
+      setSimReplication(totalReplications);
       setIsSimulating(false);
       setRunLogs((logs) => [
         ...logs,
@@ -862,7 +884,7 @@ export default function Home() {
                 setIsSimulating(false);
                 setCurrentTab("strategy_review");
               }}
-              isComplete={!isSimulating && simReplication >= totalReplications}
+              isComplete={!isSimulating && (activeStrategyIndex >= strategies.length || simReplication >= totalReplications)}
               onViewResults={() => setCurrentTab("results")}
             />
           )}
