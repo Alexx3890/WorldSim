@@ -1,0 +1,22 @@
+# College Admissions & Course Scheduling — Distribution Parameters
+# Version: 1.0.0
+
+[registration]
+# Average course requests per student
+mean_courses_per_student = 4.2
+request_variance = 0.8
+
+[advising]
+# Mean advising appointment minutes (Exponential distribution)
+mean_advising_minutes = 20.0
+advising_probability = 0.35
+
+[course_capacity]
+# Average lecture hall seat capacity
+average_section_seats = 35.0
+lab_section_seats = 20.0
+
+[costs]
+faculty_monthly_salary = 7500.0   # USD per faculty member per month
+advisor_monthly_salary = 4200.0   # USD per advisor per month
+hall_maintenance_hourly = 30.0    # USD per lecture hall operating hour

@@ -1,0 +1,30 @@
+# Municipal Permitting & Regulatory Bureau — Distribution Parameters
+# Source: Empirical municipal planning benchmarks and building authority review metrics
+# Version: 1.0.0
+
+[intake]
+# Mean intake review duration in minutes per application
+mean_intake_minutes = 20.0
+# Fraction of filings rejected or returned during initial screening
+screening_rejection_prob = 0.12
+
+[zoning]
+# Mean review duration in hours per standard zoning/structural plan
+mean_zoning_hours = 4.5
+zoning_sigma = 1.2
+# Probability that a plan requires revision and re-inspection
+revision_required_prob = 0.22
+
+[environmental]
+# Probability that application requires specialized environmental clearance
+requires_environmental_prob = 0.35
+# Mean review duration in hours
+mean_environmental_hours = 6.0
+environmental_sigma = 1.5
+
+[costs]
+intake_officer_hourly_wage = 38.0        # USD per intake officer per hour
+zoning_inspector_hourly_wage = 65.0      # USD per senior inspector per hour
+specialist_hourly_wage = 75.0            # USD per environmental specialist per hour
+expedited_fee_revenue_credit = 450.0     # USD collected per fast-track application
+operating_overhead_hourly = 85.0         # USD municipal office overhead per operating hour

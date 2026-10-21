@@ -1,0 +1,46 @@
+# Hospital ED — Arrival & Service Time Distributions
+# Source: Mataloni et al. (2020), "Emergency Department Patient Flow",
+#         Int. J. Environmental Research and Public Health, 17(17), 6360.
+#         (Illustrative calibration values for simulation purposes)
+# Version: 1.0.0
+
+[arrival]
+# Mean inter-arrival time in minutes (Exponential distribution)
+# Corresponds to ~20 patients per 8-hour shift
+mean_interarrival_minutes = 24.0
+
+# Hourly multipliers (relative to mean) for time-of-day demand variation
+# Index 0 = midnight, 6 = 6 AM, etc. (24 values)
+hourly_multipliers = [
+    0.40, 0.30, 0.25, 0.25, 0.30, 0.45,   # 00:00-05:59 (low overnight)
+    0.70, 1.00, 1.30, 1.40, 1.40, 1.35,   # 06:00-11:59 (morning ramp)
+    1.30, 1.25, 1.20, 1.15, 1.20, 1.30,   # 12:00-17:59 (daytime peak)
+    1.20, 1.10, 0.90, 0.75, 0.60, 0.50    # 18:00-23:59 (evening taper)
+]
+
+[triage]
+# Triage classification probabilities (P1=critical, P2=urgent, P3=standard)
+# Source: Gilboy et al. (2012) Emergency Severity Index v4 Implementation Handbook
+priority_weights = [0.05, 0.30, 0.65]   # [P1, P2, P3]
+
+[service_times]
+# Mean service duration in minutes (Lognormal distribution)
+# mu and sigma are parameters of the underlying normal distribution
+# P1 (critical) — longer, higher variance
+p1_lognormal_mu = 3.50
+p1_lognormal_sigma = 0.60
+
+# P2 (urgent)
+p2_lognormal_mu = 3.00
+p2_lognormal_sigma = 0.50
+
+# P3 (standard)
+p3_lognormal_mu = 2.50
+p3_lognormal_sigma = 0.45
+
+[costs]
+# Cost parameters — purely for simulation cost metric calculation
+# Source: illustrative; replace with real hospital cost data per deployment
+doctor_hourly_cost = 120.0       # USD per doctor per hour
+nurse_hourly_cost = 45.0         # USD per nurse per hour
+bed_overhead_hourly = 25.0       # USD per occupied bed per hour

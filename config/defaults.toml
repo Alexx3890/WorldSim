@@ -1,0 +1,71 @@
+# WorldSim — operational defaults (no domain assumptions allowed here)
+# All values here map to Pydantic Settings fields.
+# Domain constants (arrival rates, service times) live in packs/*/data/.
+
+[app]
+name = "WorldSim AI"
+version = "0.1.0"
+environment = "development"     # development | staging | production
+debug = false
+log_level = "INFO"              # DEBUG | INFO | WARNING | ERROR
+
+[api]
+host = "0.0.0.0"
+port = 8000
+cors_origins = ["http://localhost:3000"]
+request_timeout_seconds = 30
+max_request_body_bytes = 1_048_576   # 1 MB
+
+[simulation]
+default_replications = 20
+min_replications = 5
+max_replications = 200
+replication_timeout_seconds = 120
+warmup_fraction = 0.1           # fraction of total sim time used as warm-up
+convergence_ci_width = 0.05     # stop when 95% CI half-width / mean < this
+worker_pool_size = 4            # ProcessPoolExecutor workers for Monte Carlo
+
+[agents]
+max_clarification_questions = 5
+max_repair_retries = 3
+max_agent_steps = 50
+agent_timeout_seconds = 60
+router_confidence_threshold = 0.7
+strategy_count_default = 4     # number of alternatives suggested (excl. baseline)
+
+[llm]
+# Model names are NEVER hardcoded in logic. They live here and in provider_configs DB table.
+primary_model = "gemini-2.0-flash"
+secondary_model = "gemini-1.5-flash"
+tertiary_model = "gemini-1.5-flash-8b"
+fallback_model = "gemini-2.0-flash-lite"
+request_timeout_seconds = 20
+max_tokens = 8192
+temperature = 0.2
+circuit_breaker_failure_threshold = 5
+circuit_breaker_recovery_seconds = 60
+daily_quota_per_model = 1500    # free-tier daily quota guard
+
+[queue]
+# ARQ / Redis job queue settings
+redis_url = "redis://localhost:6379/0"
+simulation_queue = "sim_workers"
+agent_queue = "agent_workers"
+job_timeout_seconds = 300
+max_job_retries = 3
+dlq_name = "worldsim_dlq"
+heartbeat_interval_seconds = 10
+
+[auth]
+# Phase-3 lightweight auth; will layer OAuth2 in Phase 6
+session_ttl_seconds = 86400    # 24 hours
+token_algorithm = "HS256"
+
+[storage]
+result_raw_size_cap_bytes = 104_857_600  # 100 MB per run replay trace
+export_timeout_seconds = 30
+
+[quota]
+max_runs_per_workspace_per_day = 50
+max_replications_per_run = 200
+max_concurrent_runs_per_workspace = 3

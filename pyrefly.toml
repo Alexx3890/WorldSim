@@ -1,0 +1,15 @@
+search-path = [
+    "packages/shared",
+    "packages/engine",
+    "packages/packs/hospital",
+    "packages/packs/college",
+    "packages/packs/office",
+    "packages/packs/policy",
+    "packages/packs/social",
+    "packages/llm_gateway",
+    "packages/agents",
+    "apps/api",
+]
+
+[errors]
+implicit-any-empty-container = "ignore"

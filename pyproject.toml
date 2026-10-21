@@ -1,0 +1,117 @@
+[project]
+name = "worldsim"
+version = "0.1.0"
+requires-python = ">=3.12"
+
+[dependency-groups]
+dev = [
+    "pytest>=9.0.0",
+    "pytest-asyncio>=1.4.0",
+    "pytest-timeout>=2.4.0",
+]
+
+[tool.uv.workspace]
+members = [
+    "packages/shared",
+    "packages/engine",
+    "packages/llm_gateway",
+    "packages/agents",
+    "packages/packs/hospital",
+    "packages/packs/college",
+    "packages/packs/office",
+    "packages/packs/policy",
+    "packages/packs/social",
+    "apps/api",
+]
+
+[tool.uv.sources]
+worldsim-shared = { workspace = true }
+worldsim-engine = { workspace = true }
+worldsim-pack-hospital = { workspace = true }
+worldsim-pack-college = { workspace = true }
+worldsim-pack-office = { workspace = true }
+worldsim-pack-policy = { workspace = true }
+worldsim-pack-social = { workspace = true }
+worldsim-llm-gateway = { workspace = true }
+worldsim-agents = { workspace = true }
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+src = ["packages", "apps"]
+
+[tool.ruff.lint]
+select = [
+    "E",      # pycodestyle errors
+    "W",      # pycodestyle warnings
+    "F",      # pyflakes
+    "I",      # isort
+    "UP",     # pyupgrade
+    "PLR2004",# magic-value-comparison (no hardcoded numbers in logic)
+    "B",      # flake8-bugbear
+    "SIM",    # flake8-simplify
+    "TCH",    # flake8-type-checking
+]
+ignore = [
+    "E501",   # line too long — handled by formatter
+]
+
+[tool.ruff.lint.per-file-ignores]
+# Allow test files to use literals in assertions
+"tests/**" = ["PLR2004"]
+# Config defaults file is allowed to define default numeric values
+"config/defaults.toml" = ["PLR2004"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests", "packages"]
+pythonpath = [
+    "packages/shared",
+    "packages/engine",
+    "packages/packs/hospital",
+    "packages/packs/college",
+    "packages/packs/office",
+    "packages/packs/policy",
+    "packages/packs/social",
+    "packages/llm_gateway",
+    "packages/agents",
+    "apps/api",
+]
+
+[tool.pyrefly]
+search_path = [
+    "packages/shared",
+    "packages/engine",
+    "packages/packs/hospital",
+    "packages/packs/college",
+    "packages/packs/office",
+    "packages/packs/policy",
+    "packages/packs/social",
+    "packages/llm_gateway",
+    "packages/agents",
+    "apps/api",
+]
+
+[tool.pyrefly.errors]
+implicit-any-empty-container = "ignore"
+
+[tool.pyright]
+reportUnknownVariableType = false
+extraPaths = [
+    "packages/shared",
+    "packages/engine",
+    "packages/packs/hospital",
+    "packages/packs/college",
+    "packages/packs/office",
+    "packages/packs/policy",
+    "packages/packs/social",
+    "packages/llm_gateway",
+    "packages/agents",
+    "apps/api",
+]
+

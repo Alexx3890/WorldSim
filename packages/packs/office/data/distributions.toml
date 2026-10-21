@@ -1,0 +1,18 @@
+# Office Hybrid Workspace — Distribution Parameters
+# Version: 1.0.0
+
+[attendance]
+# Probability of an employee coming into office on any given weekday
+hybrid_attendance_probability = 0.58
+peak_day_multiplier = 1.35  # Tuesdays and Thursdays
+
+[meetings]
+# Probability of needing a meeting room per employee per day
+meeting_request_probability = 0.40
+mean_meeting_duration_minutes = 45.0
+duration_sigma = 15.0
+
+[costs]
+desk_lease_monthly_cost = 450.0        # USD per desk space per month
+meeting_room_overhead_monthly = 1200.0 # USD per conference room per month
+phone_booth_overhead_monthly = 300.0   # USD per focus booth per month
