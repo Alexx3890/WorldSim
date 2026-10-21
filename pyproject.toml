@@ -2,6 +2,20 @@
 name = "worldsim"
 version = "0.1.0"
 requires-python = ">=3.12"
+dependencies = [
+    "worldsim-api",
+    "worldsim-shared",
+    "worldsim-engine",
+    "worldsim-pack-hospital",
+    "worldsim-pack-college",
+    "worldsim-pack-office",
+    "worldsim-pack-policy",
+    "worldsim-pack-social",
+    "worldsim-llm-gateway",
+    "worldsim-agents",
+    "uvicorn[standard]>=0.30",
+    "fastapi>=0.115",
+]
 
 [dependency-groups]
 dev = [
@@ -25,6 +39,7 @@ members = [
 ]
 
 [tool.uv.sources]
+worldsim-api = { workspace = true }
 worldsim-shared = { workspace = true }
 worldsim-engine = { workspace = true }
 worldsim-pack-hospital = { workspace = true }
