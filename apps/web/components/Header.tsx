@@ -17,11 +17,11 @@ export default function Header({
   onSelectPackId,
   isBackendConnected = true,
 }: HeaderProps) {
-  const [theme, setTheme] = useState<"dark" | "light">("dark");
+  const [theme, setTheme] = useState<"dark" | "light">("light");
 
   useEffect(() => {
     const saved = localStorage.getItem("worldsim_theme") as "dark" | "light" | null;
-    const initialTheme = saved || "dark";
+    const initialTheme = saved || "light";
     setTheme(initialTheme);
     document.documentElement.setAttribute("data-theme", initialTheme);
     if (initialTheme === "dark") {
@@ -82,9 +82,6 @@ export default function Header({
           />
           <span className="text-[var(--text)] font-medium">
             {isBackendConnected ? "ENGINE ONLINE" : "ENGINE OFFLINE"}
-          </span>
-          <span className="text-[var(--text-dim)] font-normal hidden md:inline">
-            (:8000)
           </span>
         </div>
 
