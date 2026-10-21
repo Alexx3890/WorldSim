@@ -31,11 +31,14 @@ for p in paths:
         sys.path.insert(0, str(p))
 
 if __name__ == "__main__":
-    print(f"Starting WorldSim API on http://127.0.0.1:8000 ...")
+    import os
+    port = int(os.environ.get("PORT", 8000))
+    host = os.environ.get("HOST", "0.0.0.0")
+    print(f"Starting WorldSim API on http://{host}:{port} ...")
     uvicorn.run(
         "app.main:app",
-        host="127.0.0.1",
-        port=8000,
+        host=host,
+        port=port,
         app_dir=str(ROOT / "apps" / "api"),
         log_level="info",
     )

@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: worldsim-api
+    runtime: docker
+    plan: free
+    region: oregon
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /health
+    envVars:
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: WS_ENVIRONMENT
+        value: production
+      - key: WS_LOG_LEVEL
+        value: INFO
